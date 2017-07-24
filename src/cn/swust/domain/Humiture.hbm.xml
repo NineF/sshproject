@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC    
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"    
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="cn.swust.domain">
+	<class name="Humiture" table="Humiture">
+		<id name="humitureId" column="humitureId" type="int">
+			<generator class="native" />
+		</id>
+		<property name="temperature" column="temperature" type="string"
+			length="20" />
+		<property name="dampness" column="dampness" type="string"
+			length="20" />
+		<property name="time" column="time" type="timestamp" />
+		
+		<property name="isOut" column="isOut" type="boolean" />
+
+		<!-- 映射关系 -->
+		<many-to-one name="location" class="Location" column="location_id" />
+	</class>
+
+</hibernate-mapping>

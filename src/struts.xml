@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 2.5//EN"
+        "http://struts.apache.org/dtds/struts-2.5.dtd">
+
+
+<struts>
+	<constant name="struts.enable.DynamicMethodInvocation" value="true"></constant>
+	<package name="user" extends="struts-default,json-default"
+		namespace="/" strict-method-invocation="true">
+
+		<interceptors>
+
+			<!-- 先定义拦截器 -->
+
+			<interceptor name="myInterceptor" class="cn.swust.interceptor.LoginInterceptor">
+
+			</interceptor>
+
+			<!-- 加到自己设置的拦截器栈里边去 -->
+
+			<interceptor-stack name="myStack">
+
+				<interceptor-ref name="myInterceptor">
+
+				</interceptor-ref>
+
+				<interceptor-ref name="defaultStack"></interceptor-ref>
+
+			</interceptor-stack>
+
+		</interceptors>
+
+		<global-results>
+			<result name="notoken" type="redirectAction">error_notoken.action
+			</result>
+			<result name="tokeninvaild" type="redirectAction">error_tokeninvlid.action
+			</result>
+			<result name="tokentimeout" type="redirectAction">error_tokentimeout.action
+			</result>
+		</global-results>
+
+
+		<action name="user_*" class="userAction" method="{1}">
+
+			<interceptor-ref name="myStack" />
+
+			<result name="loginerror" type="json">
+				<!-- 这里指定将被Struts2序列化的属性，该属性在action中必须有对应的getter方法 -->
+				<param name="root">dataMap</param>
+			</result>
+			<result name="loginsuccess" type="json">
+				<!-- 这里指定将被Struts2序列化的属性，该属性在action中必须有对应的getter方法 -->
+				<param name="root">dataMap</param>
+			</result>
+
+			<result name="registsuccess" type="json">
+				<param name="root">dataMap</param>
+			</result>
+			<result name="registerror" type="json">
+				<param name="root">dataMap</param>
+			</result>
+			<result name="updatesuccess" type="json">
+				<param name="root">dataMap</param>
+			</result>
+			<result name="updateerror" type="json">
+				<param name="root">dataMap</param>
+			</result>
+
+			<allowed-methods>regex:.*</allowed-methods>
+		</action>
+
+		<action name="humiture_*" class="humitureAction" method="{1}">
+			<interceptor-ref name="myStack" />
+
+			<result name="listAll" type="json">
+				<param name="root">dataMap</param>
+			</result>
+
+			<result name="listLocation" type="json">
+				<param name="root">dataMap</param>
+			</result>
+
+			<result name="newHumiture" type="json">
+				<param name="root">dataMap</param>
+			</result>
+
+			<allowed-methods>regex:.*</allowed-methods>
+		</action>
+
+
+		<action name="location_*" class="locationAction" method="{1}">
+			<interceptor-ref name="myStack" />
+
+			<result name="locations" type="json">
+				<param name="root">dataMap</param>
+			</result>
+
+			<result name="addsuccess" type="json">
+				<param name="root">dataMap</param>
+			</result>
+
+			<result name="adderror" type="json">
+				<param name="root">dataMap</param>
+			</result>
+			<allowed-methods>regex:.*</allowed-methods>
+		</action>
+
+		<action name="error_*" class="errorAction" method="{1}">
+			<result name="notokenerror" type="json">
+				<param name="root">dataMap</param>
+			</result>
+			<result name="tokeninvlid" type="json">
+				<param name="root">dataMap</param>
+			</result>
+			<result name="tokentimeout" type="json">
+				<param name="root">dataMap</param>
+			</result>
+			<allowed-methods>regex:.*</allowed-methods>
+		</action>
+
+	</package>
+</struts>
